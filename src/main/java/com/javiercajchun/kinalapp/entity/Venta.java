@@ -2,9 +2,9 @@ package com.javiercajchun.kinalapp.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "ventas")
@@ -13,24 +13,29 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_venta")
-    private Integer codigoVenta;
-    @Column
-    private Date fechaVenta;
-    @Column
-    private double total;
-    @Column
+    private Long codigoVenta;
+    @Column(nullable = false)
+    private LocalDate fechaVenta;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal total;
+    @Column(nullable = false)
     private int estado;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Clientes_dpi_cliente", referencedColumnName = "dpi_cliente")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Clientes_dpi_cliente", referencedColumnName = "dpi_cliente", nullable = false)
     private Cliente cliente;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Usuarios_codigo_usuario", referencedColumnName = "codigo_usuario")
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Usuarios_codigo_usuario", referencedColumnName = "codigo_usuario", nullable = false)
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "ventas")
+    private List<DetalleVenta> detalleVentas;
 
     public Venta() {
     }
 
-    public Venta(Integer codigoVenta, Date fechaVenta, double total, int estado, Cliente cliente, Usuario usuario) {
+    public Venta(Long codigoVenta, LocalDate fechaVenta, BigDecimal total, int estado, Cliente cliente, Usuario usuario) {
         this.codigoVenta = codigoVenta;
         this.fechaVenta = fechaVenta;
         this.total = total;
@@ -39,27 +44,27 @@ public class Venta {
         this.usuario = usuario;
     }
 
-    public Integer getCodigoVenta() {
+    public Long getCodigoVenta() {
         return codigoVenta;
     }
 
-    public void setCodigoVenta(Integer codigoVenta) {
+    public void setCodigoVenta(Long codigoVenta) {
         this.codigoVenta = codigoVenta;
     }
 
-    public Date getFechaVenta() {
+    public LocalDate getFechaVenta() {
         return fechaVenta;
     }
 
-    public void setFechaVenta(Date fechaVenta) {
+    public void setFechaVenta(LocalDate fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
@@ -85,5 +90,13 @@ public class Venta {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<DetalleVenta> getDetalleVentas() {
+        return detalleVentas;
+    }
+
+    public void setDetalleVentas(List<DetalleVenta> detalleVentas) {
+        this.detalleVentas = detalleVentas;
     }
 }
