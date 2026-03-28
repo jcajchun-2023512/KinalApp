@@ -42,32 +42,32 @@ public class UsuarioService implements IUsuarioService{
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Usuario> buscarPorId(Integer id){
-        return usuarioRepository.findById(id);
+    public Optional<Usuario> buscarPorId(int id){
+        return usuarioRepository.findById((long)id);
     }
 
     @Override
-    public Usuario actualizar(Integer id, Usuario usuario) {
-        if(!usuarioRepository.existsById(id)){
+    public Usuario actualizar(int id, Usuario usuario) {
+        if(!usuarioRepository.existsById((long)id)){
             throw new RuntimeException("Usuario no encontrado por ID" + id );
         }
-        usuario.setCodigo_usuario(id);
+        usuario.setCodigoUsuario((long)id);
         validarUsuario(usuario);
         return usuarioRepository.save(usuario);
     }
 
     @Override
-    public void eliminar (Integer id) {
-        if(!usuarioRepository.existsById(id)){
+    public void eliminar (int id) {
+        if(!usuarioRepository.existsById((long)id)){
             throw new RuntimeException("El usuario no se encontro con el ID" + id);
         }
-        usuarioRepository.deleteById(id);
+        usuarioRepository.deleteById((long)id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorId(Integer id) {
-        return usuarioRepository.existsById(id);
+    public boolean existePorId(int id) {
+        return usuarioRepository.existsById((long)id);
     }
 
     private void validarUsuario(Usuario usuario){
