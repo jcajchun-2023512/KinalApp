@@ -55,7 +55,7 @@ public class ClienteService implements IClienteServise{
     @Transactional(readOnly = true)
     public List<Cliente> listarEstadosActivos() {
         return clienteRepository.findAll()
-                .stream() //se usa para pasar una coleccion de datos en una secuencia para que sea mas facil el filtrar
+                .stream() //se usa para pasar una coleccion de datos en una secuencia para que sea más facil el filtrar
                 //datos
                 .filter(cliente -> cliente.getEstado() == 1) //este filtra la secuencia de datos que nos da el Stream
                 //para que si el cliente esta en activo pase y si no pues se quede afuera del JSON
