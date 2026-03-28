@@ -13,16 +13,16 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_producto")
     private Long codigoProducto;
-    @Column
+    @Column(nullable = false)
     private String nombreProducto;
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal  precio;
-    @Column
+    @Column(nullable = false)
     private int stock;
-    @Column
+    @Column(nullable = false)
     private int estado;
 
-    @OneToMany(mappedBy = "productos", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "producto")
     private List<DetalleVenta> detalleVentas;
 
     public Producto() {
