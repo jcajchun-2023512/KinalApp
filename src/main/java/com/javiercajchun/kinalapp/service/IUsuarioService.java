@@ -13,11 +13,11 @@ public interface IUsuarioService{
 
     Usuario guardar(Usuario usuario);
 
-    Optional<Usuario> buscarPorId(Integer id);
+    Optional<Usuario> buscarPorId(int id);
 
-    Usuario actualizar(Integer id, Usuario usuario);
+    Usuario actualizar(int id, Usuario usuario);
 
-    void eliminar(Integer id);
+    void eliminar(int id);
 
-    boolean existePorId(Integer id);
+    boolean existePorId(int id);
 }

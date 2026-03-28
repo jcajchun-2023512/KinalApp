@@ -30,7 +30,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable int id){
         return usuarioService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -47,7 +47,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id){
+    public ResponseEntity<Void> eliminar(@PathVariable int id){
         try {
             if(!usuarioService.existePorId(id)){
                 return ResponseEntity.notFound().build();
@@ -60,7 +60,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
+    public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Usuario usuario){
         try {
             if(!usuarioService.existePorId(id)){
                 return ResponseEntity.notFound().build();
