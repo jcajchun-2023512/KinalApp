@@ -14,7 +14,7 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo_venta")
     private Long codigoVenta;
-    @Column(nullable = false)
+    @Column
     private LocalDate fechaVenta;
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal total;
