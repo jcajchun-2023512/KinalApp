@@ -1,7 +1,7 @@
 package com.javiercajchun.kinalapp.controller;
 
 import com.javiercajchun.kinalapp.entity.Venta;
-import com.javiercajchun.kinalapp.service.IVentaService;
+import com.javiercajchun.kinalapp.service.VentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping("/ventas")
 public class VentaController {
 
-    private final IVentaService ventaService;
+    private final VentaService ventaService;
 
-    public VentaController(IVentaService ventaService){
+    public VentaController(VentaService ventaService){
         this.ventaService = ventaService;
     }
 
@@ -38,10 +38,10 @@ public class VentaController {
 
     @PostMapping
     public ResponseEntity<?> guardar(@RequestBody Venta venta){
-        try {
+        try{
             Venta nuevaVenta = ventaService.guardar(venta);
             return new ResponseEntity<>(nuevaVenta, HttpStatus.CREATED);
-        }catch (IllegalArgumentException e){
+        }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
