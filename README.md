@@ -1,6 +1,7 @@
 # KinalApp
  
-Documentación del Proyecto
+Documentación del Proyecto KinalApp: 
+
 Lo que hicimos fue una API REST construida con tecnologías modernas del ecosistema Java. Su función principal es gestionar el ciclo de ventas de un negocio, permitiendo realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) sobre entidades fundamentales como clientes, productos, usuarios y las transacciones de venta.
 
 Análisis de los Componentes
