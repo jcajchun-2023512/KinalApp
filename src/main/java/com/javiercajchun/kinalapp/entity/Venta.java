@@ -1,5 +1,6 @@
 package com.javiercajchun.kinalapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -29,6 +30,8 @@ public class Venta {
     @JoinColumn(name = "Usuarios_codigo_usuario", referencedColumnName = "codigo_usuario", nullable = false)
     private Usuario usuario;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "ventas")
     private List<DetalleVenta> detalleVentas;
 
