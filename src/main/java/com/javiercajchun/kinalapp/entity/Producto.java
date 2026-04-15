@@ -1,5 +1,6 @@
 package com.javiercajchun.kinalapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -22,18 +23,20 @@ public class Producto {
     @Column(nullable = false)
     private int estado;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "producto")
     private List<DetalleVenta> detalleVentas;
 
     public Producto() {
     }
 
-    public Producto(Long codigoProducto, String nombreProducto, BigDecimal precio, int stock, int estado) {
+    public Producto(Long codigoProducto, String nombreProducto, BigDecimal precio, int stock, int estado, List<DetalleVenta> detalleVentas) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.precio = precio;
         this.stock = stock;
         this.estado = estado;
+        this.detalleVentas = detalleVentas;
     }
 
     public Long getCodigoProducto() {
@@ -83,4 +86,5 @@ public class Producto {
     public void setDetalleVentas(List<DetalleVenta> detalleVentas) {
         this.detalleVentas = detalleVentas;
     }
+
 }
