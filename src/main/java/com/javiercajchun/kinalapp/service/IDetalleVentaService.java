@@ -7,15 +7,13 @@ import java.util.Optional;
 
 public interface IDetalleVentaService {
 
-    List<DetalleVenta> listarTodos();
+    List<DetalleVenta> listarVentas();
 
-    DetalleVenta guardar(DetalleVenta detalleVenta);
+    List<DetalleVenta> listarEstado();
 
-    Optional<DetalleVenta> buscarPorId(Long id);
+    DetalleVenta guardar (DetalleVenta detalleVenta);
 
-    DetalleVenta actualizar(Long id, DetalleVenta detalleVenta);
+    Optional<DetalleVenta> buscarPorId (int id);
 
-    void eliminar(Long id);
-
-    boolean existePorId(Long id);
+    boolean existePorId (int id);
 }
