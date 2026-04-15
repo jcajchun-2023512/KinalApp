@@ -32,7 +32,7 @@ body {
     background: linear-gradient(180deg, var(--azul-kinal) 0%, var(--azul-kinal-dark) 100%);
     position: fixed;
     padding: 30px 20px;
-    color: white;
+    color: var(--gris-asfalto);
     z-index: 1000;
     box-shadow: var(--shadow-lg);
     backdrop-filter: blur(10px);
@@ -40,23 +40,39 @@ body {
 
 .sidebar-header { 
     text-align: center; 
-    margin-bottom: 40px; 
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 30px; 
+    padding-bottom: 15px;
 }
 
 .sidebar-header img { 
-    width: 80px; 
-    height: 80px;
-    border-radius: 20px; 
+    width: 180px; 
+    height: auto;
     margin-bottom: 15px; 
-    border: 3px solid var(--naranja-vibrante);
-    box-shadow: 0 4px 15px rgba(241, 143, 1, 0.3);
-    transition: transform 0.3s ease;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
 .sidebar-header img:hover {
-    transform: scale(1.05);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(241, 143, 1, 0.25);
+}
+
+.sidebar-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 10px;
+    color: white;
+}
+
+.sidebar-header p {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: white;
+    opacity: 0.9;
 }
 
 .sidebar-header h3 {
@@ -137,23 +153,7 @@ body {
 
 /* Logo Icon */
 .logo-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--naranja-vibrante) 0%, var(--naranja-dark) 100%);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 15px;
-    color: white;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(241, 143, 1, 0.3);
-    transition: all 0.3s ease;
-}
-
-.logo-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(241, 143, 1, 0.4);
+    margin: 0 auto 10px;
 }
 
 .card {
