@@ -47,6 +47,11 @@ public class UsuarioService implements IUsuarioService{
     }
 
     @Override
+    public Optional<Usuario> buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+    @Override
     public Usuario actualizar(int id, Usuario usuario) {
         if(!usuarioRepository.existsById((long)id)){
             throw new RuntimeException("Usuario no encontrado por ID" + id );

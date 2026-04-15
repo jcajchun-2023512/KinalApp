@@ -15,6 +15,8 @@ public interface IUsuarioService{
 
     Optional<Usuario> buscarPorId(int id);
 
+    Optional<Usuario> buscarPorEmail(String email);
+
     Usuario actualizar(int id, Usuario usuario);
 
     void eliminar(int id);
