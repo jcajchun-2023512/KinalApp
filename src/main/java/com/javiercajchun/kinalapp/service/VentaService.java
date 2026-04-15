@@ -58,6 +58,7 @@ public class VentaService implements IVentaService {
     @Override
     @Transactional
     public Optional<Venta> buscarPorId(int id) {
+
         return ventaRepository.findById((long) id);
     }
 
@@ -73,15 +74,6 @@ public class VentaService implements IVentaService {
         validarVenta(venta);
 
         return ventaRepository.save(venta);
-    }
-
-    @Override
-    @Transactional
-    public void eliminar(int id) {
-        if (!ventaRepository.existsById((long) id)){
-            throw new RuntimeException("Venta no encontrada por ID" + id);
-        }
-        ventaRepository.deleteById((long)id);
     }
 
     @Override
