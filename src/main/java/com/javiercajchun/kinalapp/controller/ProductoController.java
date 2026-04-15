@@ -1,15 +1,13 @@
 package com.javiercajchun.kinalapp.controller;
 
 import com.javiercajchun.kinalapp.entity.Producto;
-import com.javiercajchun.kinalapp.repository.ProductoRepository;
 import com.javiercajchun.kinalapp.service.IProductoService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/productos")
 public class ProductoController {
 
@@ -19,68 +17,72 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
+    // LISTAR TODOS
     @GetMapping
-    public ResponseEntity<List<Producto>> listarTodos(){
-        List<Producto> productos = productoService.listarTodos();
-        return ResponseEntity.ok(productos);
+    public String listarTodos(Model model) {
+        model.addAttribute("productos", productoService.listarTodos());
+        model.addAttribute("viewTitle", "Todos los Productos");
+        return "productos";
     }
 
-    @GetMapping("/estado")
-    public ResponseEntity<List<Producto>> listarEstadoProductos(){
-        return ResponseEntity.ok(productoService.listarEstadoProductos());
+    // LISTAR ACTIVOS
+    @GetMapping("/activos")
+    public String listarActivos(Model model) {
+        model.addAttribute("productos", productoService.listarEstadoProductos());
+        model.addAttribute("viewTitle", "Productos Activos");
+        return "productos";
     }
 
-    @GetMapping("/stock")
-    public ResponseEntity<List<String>> listarStock(){
-        List<String > stock = productoService.listarStock();
-        if (stock.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(stock);
+    // FORMULARIO NUEVO
+    @GetMapping("/nuevo")
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("producto", new Producto());
+        model.addAttribute("viewTitle", "Registrar Nuevo Producto");
+        return "formularioProducto";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Producto>buscarPorId(@PathVariable int id){
-        return productoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<?>  guardar(@RequestBody Producto producto){
-        try{
-            Producto productoNuevo = productoService.guardar(producto);
-            return new ResponseEntity<>(productoNuevo, HttpStatus.CREATED);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable int id){
-        try{
-            if(!productoService.existePorId(id)){
-                return ResponseEntity.notFound().build();
+    // GUARDAR
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute Producto producto, RedirectAttributes flash) {
+        try {
+            if (producto.getEstado() == 0) {
+                producto.setEstado(1);
             }
-            productoService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
+            productoService.guardar(producto);
+            flash.addFlashAttribute("success", "Producto guardado correctamente");
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al guardar: " + e.getMessage());
+        }
+        return "redirect:/productos";
+    }
+
+    // FORMULARIO EDITAR
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEditar(@PathVariable int id, Model model, RedirectAttributes flash) {
+        var producto = productoService.buscarPorId(id);
+        if (producto.isPresent()) {
+            model.addAttribute("producto", producto.get());
+            model.addAttribute("viewTitle", "Editar Producto: " + producto.get().getNombreProducto());
+            return "formularioProducto";
+        } else {
+            flash.addFlashAttribute("error", "El producto no existe");
+            return "redirect:/productos";
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Producto producto){
-        try{
-            if (!productoService.existePorId(id)){
-                return ResponseEntity.notFound().build();
+    // ELIMINAR
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable int id, RedirectAttributes flash) {
+        try {
+            if (productoService.existePorId(id)) {
+                productoService.eliminar(id);
+                flash.addFlashAttribute("success", "Producto eliminado con éxito");
+            } else {
+                flash.addFlashAttribute("error", "No se pudo eliminar, el producto no existe");
             }
-            Producto productoActualizar = productoService.actualizar(id, producto);
-            return ResponseEntity.ok(productoActualizar);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al eliminar: " + e.getMessage());
         }
+        return "redirect:/productos";
     }
 }
