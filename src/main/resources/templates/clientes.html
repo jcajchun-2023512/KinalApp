@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='clientes')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-users"></i> Gestión de Clientes</h1>
+            <p class="page-subtitle">Administra todos los clientes del sistema</p>
+        </div>
+        <a th:href="@{/clientes/nuevo}" class="btn-primary">
+            <i class="fas fa-user-plus"></i> Nuevo Cliente
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-users"></i> Lista de Clientes</h2>
+            <span th:text="${clientes != null ? clientes.size() + ' clientes' : '0 clientes'}" class="badge badge-success"></span>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-id-card"></i> DPI</th>
+                        <th><i class="fas fa-user"></i> Nombre Completo</th>
+                        <th><i class="fas fa-map-marker-alt"></i> Dirección</th>
+                        <th><i class="fas fa-circle"></i> Estado</th>
+                        <th><i class="fas fa-cogs"></i> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cliente : ${clientes}">
+                    <td><strong th:text="${cliente.DPICliente}">1234567890101</strong></td>
+                    <td th:text="${cliente.nombreCliente + ' ' + cliente.apellidoCliente}">Javier Cajchún</td>
+                    <td th:text="${cliente.direccion}">Sakerty 2, Guatemala</td>
+                    <td>
+                        <span class="badge" th:classappend="${cliente.estado == 1} ? 'badge-success' : 'badge-danger'"
+                              th:text="${cliente.estado == 1} ? 'Activo' : 'Inactivo'"></span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}" class="btn-sm btn-warning" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a th:href="@{/clientes/eliminar/{dpi}(dpi=${cliente.DPICliente})}" class="btn-sm btn-danger"
+                               onclick="return confirm('¿Eliminar este cliente?')" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${clientes.empty}">
+                    <td colspan="5" class="empty-row">
+                        <i class="fas fa-inbox"></i> No hay clientes registrados
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='usuarios')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-user-shield"></i> Control de Accesos</h1>
+            <p class="page-subtitle">Usuarios que tienen acceso al sistema Kinal App</p>
+        </div>
+        <a th:href="@{/usuarios/nuevo}" class="btn-primary">
+            <i class="fas fa-user-plus"></i> Nuevo Usuario
+        </a>
+    </div>
+
+    <!-- Mensajes flash -->
+    <div th:if="${success}" class="alert alert-success">
+        <i class="fas fa-check-circle"></i> <span th:text="${success}">Éxito</span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}">Error</span>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${usuarios != null ? usuarios.size() : 0}">0</h3>
+                <p>Total Usuarios</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${usuarios != null ? #lists.size(usuarios) : 0}">0</h3>
+                <p>Usuarios Activos</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${usuarios != null ? #lists.size(usuarios) : 0}">0</h3>
+                <p>Administradores</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${usuarios != null ? #lists.size(usuarios) : 0}">0</h3>
+                <p>Usuarios Regulares</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-filter"></i> Filtros y Búsqueda</h2>
+        </div>
+        <div class="filter-container">
+            <div class="filter-group">
+                <a th:href="@{/usuarios}" class="filter-btn active">
+                    <i class="fas fa-list"></i> Todos
+                </a>
+                <a th:href="@{/usuarios/activos}" class="filter-btn">
+                    <i class="fas fa-check-circle"></i> Activos
+                </a>
+                <a th:href="@{/usuarios/inactivos}" class="filter-btn">
+                    <i class="fas fa-times-circle"></i> Inactivos
+                </a>
+            </div>
+            <form th:action="@{/usuarios/buscar}" method="get" class="search-form">
+                <div class="search-input-group">
+                    <input type="number" name="id" placeholder="Buscar por ID..." class="search-input" />
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-users"></i> Lista de Usuarios</h2>
+            <span th:text="${usuarios != null ? usuarios.size() + ' usuarios' : '0 usuarios'}" class="badge badge-success"></span>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user"></i> Username</th>
+                        <th><i class="fas fa-envelope"></i> Email</th>
+                        <th><i class="fas fa-user-tag"></i> Rol</th>
+                        <th><i class="fas fa-circle"></i> Estado</th>
+                        <th><i class="fas fa-cogs"></i> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="u : ${usuarios}">
+                    <td><strong th:text="${u.codigoUsuario}">1</strong></td>
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-avatar-small">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span th:text="${u.username}">admin</span>
+                        </div>
+                    </td>
+                    <td th:text="${u.email}">admin@kinal.edu.gt</td>
+                    <td>
+                        <span class="badge" 
+                              th:classappend="${u.rol == 'ADMIN'} ? 'badge-warning' : 'badge-info'"
+                              th:text="${u.rol}">ADMIN</span>
+                    </td>
+                    <td>
+                        <span class="badge" 
+                              th:classappend="${u.estado == 1} ? 'badge-success' : 'badge-danger'"
+                              th:text="${u.estado == 1} ? 'Activo' : 'Inactivo'">Activo</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a th:href="@{/usuarios/editar/{id}(id=${u.codigoUsuario})}" 
+                               class="btn-sm btn-warning" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a th:href="@{/usuarios/eliminar/{id}(id=${u.codigoUsuario})}" 
+                               class="btn-sm btn-danger"
+                               onclick="return confirm('¿Eliminar este usuario?')" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${usuarios.empty}">
+                    <td colspan="6" class="empty-row">
+                        <i class="fas fa-inbox"></i> 
+                        <h4>No hay usuarios registrados</h4>
+                        <p>Comienza agregando el primer usuario al sistema</p>
+                        <a th:href="@{/usuarios/nuevo}" class="btn-primary" style="margin-top: 15px; display: inline-block;">
+                            <i class="fas fa-plus"></i> Crear primer usuario
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    background: white;
+    color: var(--azul-kinal);
+    border: 2px solid var(--azul-glacial);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-btn:hover {
+    background: var(--azul-kinal);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 59, 115, 0.2);
+}
+
+.filter-btn.active {
+    background: var(--naranja-vibrante);
+    color: white;
+    border-color: var(--naranja-vibrante);
+}
+
+.search-form {
+    flex-shrink: 0;
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--azul-glacial);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-input-group:focus-within {
+    border-color: var(--naranja-vibrante);
+    box-shadow: 0 0 0 3px rgba(241, 143, 1, 0.1);
+}
+
+.search-input {
+    border: none;
+    padding: 10px 15px;
+    outline: none;
+    min-width: 200px;
+    font-size: 14px;
+}
+
+.search-btn {
+    background: var(--naranja-vibrante);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    background: var(--naranja-dark);
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar-small {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, var(--azul-kinal) 0%, var(--azul-kinal-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    border: 2px solid var(--naranja-vibrante);
+}
+
+.empty-row h4 {
+    color: var(--azul-kinal);
+    font-size: 18px;
+    margin: 10px 0 5px 0;
+}
+
+.empty-row p {
+    color: var(--gris-asfalto);
+    opacity: 0.7;
+    margin: 0 0 15px 0;
+}
+</style>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

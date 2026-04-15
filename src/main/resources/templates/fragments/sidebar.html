@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon">
+            <i class="fas fa-building"></i>
+        </div>
+        <h2>Kinal App</h2>
+        <p>Gestión de Clientes</p>
+    </div>
+    <div class="sidebar-menu">
+        <a href="/dashboard" class="menu-item" th:classappend="${active == 'dashboard'} ? 'active' : ''">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/clientes" class="menu-item" th:classappend="${active == 'clientes'} ? 'active' : ''">
+            <i class="fas fa-users"></i>
+            <span>Clientes</span>
+        </a>
+        <a href="/productos" class="menu-item" th:classappend="${active == 'productos'} ? 'active' : ''">
+            <i class="fas fa-box"></i>
+            <span>Productos</span>
+        </a>
+        <a href="/usuarios" class="menu-item" th:classappend="${active == 'usuarios'} ? 'active' : ''">
+            <i class="fas fa-user-cog"></i>
+            <span>Usuarios</span>
+        </a>
+        <a href="/ventas" class="menu-item" th:classappend="${active == 'ventas'} ? 'active' : ''">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Ventas</span>
+        </a>
+        <a href="/detalleVentas" class="menu-item" th:classappend="${active == 'detalleVentas'} ? 'active' : ''">
+            <i class="fas fa-receipt"></i>
+            <span>Detalle Ventas</span>
+        </a>
+    </div>
+</div>
+</body>
+</html>

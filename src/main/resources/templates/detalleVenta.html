@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='ventas')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div>
+            <h1><i class="fas fa-receipt"></i> <span th:text="${viewTitle}">Detalle de Venta</span></h1>
+            <p>Gestión de productos de esta venta</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a th:href="@{/detalleVentas/nuevo/{id}(id=${venta.codigoVenta})}" class="btn-primary">
+                <i class="fas fa-plus"></i> Agregar Producto
+            </a>
+            <a th:href="@{/ventas}" class="btn-primary" style="background: var(--gris-asfalto);">
+                <i class="fas fa-arrow-left"></i> Volver a Ventas
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Información de la venta -->
+    <div class="card" style="margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 15px;">
+            <div>
+                <strong><i class="fas fa-receipt"></i> No. Factura:</strong>
+                <span th:text="${venta.codigoVenta}"></span>
+            </div>
+            <div>
+                <strong><i class="fas fa-user"></i> Cliente:</strong>
+                <span th:text="${venta.cliente != null ? venta.cliente.nombreCliente + ' ' + venta.cliente.apellidoCliente : 'N/A'}"></span>
+            </div>
+            <div>
+                <strong><i class="fas fa-dollar-sign"></i> Total Venta:</strong>
+                <span style="color: var(--naranja-vibrante); font-weight: bold;" th:text="'Q' + ${venta.total}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de productos de esta venta -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-list"></i> Productos de esta Venta</h2>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th><i class="fas fa-hashtag"></i> ID</th>
+                <th><i class="fas fa-box"></i> Producto</th>
+                <th><i class="fas fa-sort-numeric-up"></i> Cantidad</th>
+                <th><i class="fas fa-tag"></i> Precio Unitario</th>
+                <th><i class="fas fa-dollar-sign"></i> Subtotal</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detalle : ${detalles}">
+                <td th:text="${detalle.codigoDetalleVenta}">1</td>
+                <td th:text="${detalle.producto != null ? detalle.producto.nombreProducto : 'N/A'}">-</td>
+                <td th:text="${detalle.cantidad}">0</td>
+                <td th:text="'Q' + ${detalle.precioUnitario}">Q0.00</td>
+                <td th:text="'Q' + ${detalle.subTotal}" style="font-weight: bold;">Q0.00</td>
+                <td>
+                    <a th:href="@{/detalleVentas/eliminar/{id}(id=${detalle.codigoDetalleVenta})}"
+                       class="btn-sm btn-danger"
+                       onclick="return confirm('¿Eliminar este producto de la venta?')"
+                       title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${detalles == null or detalles.empty}">
+                <td colspan="6" class="empty-row">
+                    <i class="fas fa-inbox"></i> No hay productos en esta venta
+                    <br>
+                    <a th:href="@{/detalleVentas/nuevo/{id}(id=${venta.codigoVenta})}" class="btn-primary" style="margin-top: 10px; display: inline-block;">
+                        <i class="fas fa-plus"></i> Agregar primer producto
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot th:if="${venta != null and detalles != null and not detalles.empty}">
+            <tr style="background: #f8f9fa;">
+                <th colspan="4" style="text-align: right;">TOTAL GENERAL:</th>
+                <th colspan="2" style="font-size: 1.2rem; color: var(--naranja-vibrante);" th:text="'Q' + ${venta.total}"></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

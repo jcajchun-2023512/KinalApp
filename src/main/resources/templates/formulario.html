@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='clientes')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <h1><i class="fas fa-edit"></i> <span th:text="${viewTitle}">Formulario</span></h1>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">DPI / Identificación</label>
+                <input type="text" th:field="*{DPICliente}" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Nombre</label>
+                    <input type="text" th:field="*{nombreCliente}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Apellido</label>
+                    <input type="text" th:field="*{apellidoCliente}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Dirección</label>
+                <input type="text" th:field="*{direccion}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <a th:href="@{/clientes}" class="btn-primary" style="background: var(--gris-asfalto);">Cancelar</a>
+                <button type="submit" class="btn-primary">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
