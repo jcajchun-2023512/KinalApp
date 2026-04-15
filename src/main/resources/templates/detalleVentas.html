@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='detalleVentas')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-receipt"></i> Detalle de Ventas</h1>
+            <p class="page-subtitle">Listado de todos los productos vendidos</p>
+        </div>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success">
+        <i class="fas fa-check-circle"></i> <span th:text="${success}">Éxito</span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}">Error</span>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${detalles != null ? detalles.size() : 0}">0</h3>
+                <p>Total Detalles</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-list"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${detalles != null ? #lists.size(detalles) : 0}">0</h3>
+                <p>Productos Vendidos</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-box"></i>
+            </div>
+        </div>
+        <div class="stat-card total-general-card">
+            <div class="stat-info">
+                <h3 th:text="'Q' + ${totalGeneral != null ? totalGeneral : '0.00'}">Q0.00</h3>
+                <p>Total General</p>
+            </div>
+            <div class="stat-icon total-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${detalles != null ? #lists.size(detalles) : 0}">0</h3>
+                <p>Unidades Vendidas</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-sort-numeric-up"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-list"></i> Lista de Detalles de Ventas</h2>
+            <span th:text="${detalles != null ? detalles.size() + ' detalles' : '0 detalles'}" class="badge badge-success"></span>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID Detalle</th>
+                        <th><i class="fas fa-receipt"></i> Venta #</th>
+                        <th><i class="fas fa-user"></i> Cliente</th>
+                        <th><i class="fas fa-box"></i> Producto</th>
+                        <th><i class="fas fa-sort-numeric-up"></i> Cantidad</th>
+                        <th><i class="fas fa-tag"></i> Precio Unitario</th>
+                        <th><i class="fas fa-dollar-sign"></i> Subtotal</th>
+                        <th><i class="fas fa-calendar"></i> Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detalle : ${detalles}">
+                    <td><strong th:text="${detalle.codigoDetalleVenta}">1</strong></td>
+                    <td>
+                        <a th:href="@{/detalleVentas/venta/{id}(id=${detalle.ventas.codigoVenta})}"
+                           class="btn-sm btn-warning" title="Ver Venta">
+                            <i class="fas fa-eye"></i> #<span th:text="${detalle.ventas.codigoVenta}"></span>
+                        </a>
+                    </td>
+                    <td th:text="${detalle.ventas.cliente != null ? detalle.ventas.cliente.nombreCliente + ' ' + detalle.ventas.cliente.apellidoCliente : 'N/A'}">-</td>
+                    <td>
+                        <span class="badge badge-warning" th:text="${detalle.producto != null ? detalle.producto.nombreProducto : 'N/A'}">-</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-success" th:text="${detalle.cantidad}">0</span>
+                    </td>
+                    <td th:text="'Q' + ${detalle.precioUnitario}">Q0.00</td>
+                    <td>
+                        <span class="badge badge-success" th:text="'Q' + ${detalle.subTotal}">Q0.00</span>
+                    </td>
+                    <td th:text="${#temporals.format(detalle.ventas.fechaVenta, 'dd/MM/yyyy')}">-</td>
+                </tr>
+                <tr th:if="${detalles == null or detalles.empty}">
+                    <td colspan="8" class="empty-row">
+                        <i class="fas fa-inbox"></i> No hay detalles de ventas registrados
+                        <br>
+                        <a th:href="@{/ventas}" class="btn-primary" style="margin-top: 15px; display: inline-block;">
+                            <i class="fas fa-plus"></i> Crear una venta primero
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

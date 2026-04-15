@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='ventas')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-cart-plus"></i> <span th:text="${viewTitle}">Agregar Producto</span></h1>
+            <p>Seleccione un producto y la cantidad para esta venta</p>
+        </div>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form th:action="@{/detalleVentas/guardar}" th:object="${detalle}" method="post">
+
+            <!-- ID de la Venta (oculto) -->
+            <input type="hidden" name="ventaId" th:value="${ventaId}">
+
+            <!-- Producto -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                    <i class="fas fa-box"></i> Producto *
+                </label>
+                <select name="productoId" class="form-control" id="productoSelect"
+                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);"
+                        required>
+                    <option value="">Seleccione un producto...</option>
+                    <option th:each="producto : ${productos}"
+                            th:value="${producto.codigoProducto}"
+                            th:text="${producto.nombreProducto + ' - Q' + producto.precio + ' (Stock: ' + producto.stock + ')'}"
+                            th:data-precio="${producto.precio}"
+                            th:data-nombre="${producto.nombreProducto}"
+                            th:data-stock="${producto.stock}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Cantidad -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                    <i class="fas fa-sort-numeric-up"></i> Cantidad *
+                </label>
+                <input type="number" th:field="*{cantidad}" class="form-control" id="cantidad"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);"
+                       min="1" value="1" required>
+            </div>
+
+            <!-- Precio Unitario (solo lectura) -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                    <i class="fas fa-tag"></i> Precio Unitario
+                </label>
+                <input type="text" id="precioUnitarioMostrar" class="form-control" readonly
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial); background: #f5f5f5;">
+                <input type="hidden" th:field="*{precioUnitario}" id="precioUnitario">
+            </div>
+
+            <!-- Subtotal (calculado automáticamente) -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                    <i class="fas fa-dollar-sign"></i> Subtotal
+                </label>
+                <input type="text" id="subtotalMostrar" class="form-control" readonly
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial); background: #f5f5f5; font-weight: bold; color: var(--naranja-vibrante);">
+                <input type="hidden" th:field="*{subTotal}" id="subTotal">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
+                <a th:href="@{/detalleVentas/venta/{id}(id=${ventaId})}" class="btn-primary" style="background: var(--gris-asfalto); text-decoration: none;">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+                <button type="submit" class="btn-primary" onclick="return validarFormulario()">
+                    <i class="fas fa-save"></i> Agregar Producto
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const productoSelect = document.getElementById('productoSelect');
+    const cantidadInput = document.getElementById('cantidad');
+    const precioUnitarioMostrar = document.getElementById('precioUnitarioMostrar');
+    const precioUnitarioHidden = document.getElementById('precioUnitario');
+    const subtotalMostrar = document.getElementById('subtotalMostrar');
+    const subtotalHidden = document.getElementById('subTotal');
+
+    function calcularSubtotal() {
+        const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            const precio = parseFloat(selectedOption.dataset.precio);
+            const cantidad = parseInt(cantidadInput.value) || 0;
+            const subtotal = precio * cantidad;
+
+            precioUnitarioMostrar.value = 'Q' + precio.toFixed(2);
+            precioUnitarioHidden.value = precio.toFixed(2);
+            subtotalMostrar.value = 'Q' + subtotal.toFixed(2);
+            subtotalHidden.value = subtotal.toFixed(2);
+        } else {
+            precioUnitarioMostrar.value = '';
+            precioUnitarioHidden.value = '';
+            subtotalMostrar.value = '';
+            subtotalHidden.value = '';
+        }
+    }
+
+    function validarFormulario() {
+        if (!productoSelect.value) {
+            alert('Debe seleccionar un producto');
+            return false;
+        }
+        if (!cantidadInput.value || cantidadInput.value < 1) {
+            alert('Debe ingresar una cantidad válida');
+            return false;
+        }
+        return true;
+    }
+
+    productoSelect.addEventListener('change', calcularSubtotal);
+    cantidadInput.addEventListener('input', calcularSubtotal);
+
+    // Calcular al cargar
+    window.addEventListener('DOMContentLoaded', calcularSubtotal);
+</script>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Kinal App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .auth-logo-img {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            display: block;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 59, 115, 0.3);
+            border: 4px solid var(--naranja-vibrante);
+            transition: all 0.3s ease;
+        }
+        .auth-logo-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 12px 40px rgba(241, 143, 1, 0.4);
+        }
+        .auth-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .kinal-logo-text {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--azul-kinal) 0%, var(--naranja-vibrante) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .auth-subtitle {
+            color: var(--gris-asfalto);
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: var(--azul-kinal);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .form-group label i {
+            margin-right: 8px;
+            color: var(--naranja-vibrante);
+            font-size: 16px;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 59, 115, 0.1);
+            padding: 14px 18px;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-control:focus {
+            border-color: var(--azul-kinal);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 59, 115, 0.1);
+            transform: translateY(-2px);
+        }
+        .auth-btn {
+            background: linear-gradient(135deg, var(--azul-kinal) 0%, var(--azul-kinal-dark) 100%);
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+        .auth-btn:hover {
+            background: linear-gradient(135deg, var(--naranja-vibrante) 0%, var(--naranja-dark) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(241, 143, 1, 0.4);
+        }
+        .auth-link {
+            color: var(--gris-asfalto);
+            font-size: 15px;
+            margin-top: 30px;
+        }
+        .auth-link a {
+            color: var(--azul-kinal);
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .auth-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--naranja-vibrante);
+            transition: width 0.3s ease;
+        }
+        .auth-link a:hover::after {
+            width: 100%;
+        }
+        .alert {
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-weight: 500;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+        }
+        .alert-danger::before {
+            background: var(--naranja-vibrante);
+        }
+        .alert-success::before {
+            background: #28a745;
+        }
+        .register-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--azul-kinal);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, var(--azul-kinal) 0%, var(--azul-kinal-dark) 100%);">
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <!-- Logo de KinalApp -->
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--azul-kinal) 0%, var(--naranja-vibrante) 100%); border-radius: 20px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 800; color: white; box-shadow: 0 8px 25px rgba(0, 59, 115, 0.3); border: 3px solid rgba(255,255,255,0.2);">
+                K
+            </div>
+            <h1 class="register-title">Crear Cuenta</h1>
+            <p class="auth-subtitle">Regístrate para comenzar</p>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}">Error</span>
+        </div>
+
+        <form th:action="@{/register}" method="post" th:object="${usuario}">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nombre</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Apellido</label>
+                <input type="text" name="apellido" class="form-control" placeholder="Tu apellido" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Contraseña</label>
+                <input type="password" name="password" class="form-control" placeholder="Mínimo 4 caracteres" required>
+            </div>
+            <button type="submit" class="auth-btn">
+                <i class="fas fa-check-circle"></i> Registrarse
+            </button>
+        </form>
+
+        <div class="auth-link">
+            ¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión aquí</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
