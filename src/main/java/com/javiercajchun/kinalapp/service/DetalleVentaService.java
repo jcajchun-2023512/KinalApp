@@ -11,15 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Transactional
-public class DetalleVentaService implements IDetalleVentaService{
+public class DetalleVentaService implements IDetalleVentaService {
 
     private final DetalleVentaRepository detalleVentaRepository;
     private final VentaRepository ventaRepository;
     private final ProductoRepository productoRepository;
 
-    public DetalleVentaService(DetalleVentaRepository detalleVentaRepository,  VentaRepository ventaRepository, ProductoRepository productoRepository) {
+    public DetalleVentaService(DetalleVentaRepository detalleVentaRepository,
+                               VentaRepository ventaRepository,
+                               ProductoRepository productoRepository){
         this.detalleVentaRepository = detalleVentaRepository;
         this.ventaRepository = ventaRepository;
         this.productoRepository = productoRepository;
@@ -27,17 +30,21 @@ public class DetalleVentaService implements IDetalleVentaService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<DetalleVenta> listarTodos() {
+    public List<DetalleVenta> listarVentas() {
+        return detalleVentaRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DetalleVenta> listarEstado() {
         return detalleVentaRepository.findAll();
     }
 
     @Override
     @Transactional
     public DetalleVenta guardar(DetalleVenta detalleVenta) {
-        Venta ventaReal = ventaRepository.findById(detalleVenta.getVentas().getCodigoVenta())
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-        Producto productoReal = productoRepository.findById(detalleVenta.getProducto().getCodigoProducto())
-                .orElseThrow(() -> new RuntimeException("Producto no encontrada"));
+        Venta ventaReal = ventaRepository.findById(detalleVenta.getVentas().getCodigoVenta()).orElse(null);
+        Producto productoReal = productoRepository.findById(detalleVenta.getProducto().getCodigoProducto()).orElse(null);
 
         detalleVenta.setVentas(ventaReal);
         detalleVenta.setProducto(productoReal);
@@ -47,46 +54,15 @@ public class DetalleVentaService implements IDetalleVentaService{
 
     @Override
     @Transactional
-    public Optional<DetalleVenta> buscarPorId(Long id) {
-        return detalleVentaRepository.findById( id);
-    }
-
-    @Override
-    @Transactional
-    public DetalleVenta actualizar(Long id, DetalleVenta detalleVenta) {
-        if (!detalleVentaRepository.existsById(id)) {
-            throw new RuntimeException("No existe el detalle de venta con el id: " + id);
-        }
-
-        detalleVenta.setCodigoDetalleVenta(id);
-        validarDetalleVenta(detalleVenta);
-        return detalleVentaRepository.save(detalleVenta);
-    }
-
-    @Override
-    @Transactional
-    public void eliminar(Long id) {
-        if (!detalleVentaRepository.existsById( id)) {
-            throw new RuntimeException("Detalle de venta no existe" + id);
-        }
-        detalleVentaRepository.deleteById(id);
+    public Optional<DetalleVenta> buscarPorId(int id) {
+        return detalleVentaRepository.findById((long) id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorId(Long id) {
-        return detalleVentaRepository.existsById( id);
+    public boolean existePorId(int id) {
+        return detalleVentaRepository.existsById((long)id);
+
     }
 
-    private void validarDetalleVenta(DetalleVenta detalleVenta) {
-
-        if (detalleVenta.getCantidad() < 0)
-            throw new IllegalArgumentException("La cantidad no debe de ser nulo");
-
-        if (detalleVenta.getPrecioUnitario() == null)
-            throw new IllegalArgumentException("La precio no debe de ser nulo");
-
-        if (detalleVenta.getSubTotal() == null)
-            throw new IllegalArgumentException("La subtotal no debe de ser nulo");
     }
-}
