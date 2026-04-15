@@ -17,7 +17,5 @@ public interface IVentaService {
 
     Venta actualizar (int id, Venta venta);
 
-    void eliminar (int id);
-
     boolean existePorId(int id);
 }
