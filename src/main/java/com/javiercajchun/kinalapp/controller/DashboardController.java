@@ -25,16 +25,8 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model, HttpSession session) {
+    public String dashboard(Model model) {
         System.out.println("=== DASHBOARD CONTROLLER ===");
-
-        Object usuarioLogueado = session.getAttribute("usuarioLogueado");
-        System.out.println("Sesión usuarioLogueado: " + usuarioLogueado);
-
-        if (usuarioLogueado == null) {
-            System.out.println("No hay sesión, redirigiendo a login");
-            return "redirect:/login";
-        }
 
         var todosClientes = clienteService.listarTodos();
         var clientesActivos = clienteService.listarEstadosActivos();
@@ -48,12 +40,6 @@ public class DashboardController {
 
         model.addAttribute("ultimosClientes",
                 todosClientes.stream().limit(5).toList());
-
-        // Si es Usuario, mostrar el nombre
-        if (usuarioLogueado instanceof Usuario) {
-            Usuario usuario = (Usuario) usuarioLogueado;
-            model.addAttribute("nombreUsuario", usuario.getUsername());
-        }
 
         return "dashboard";
     }
