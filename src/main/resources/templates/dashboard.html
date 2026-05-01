@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/header :: header}"></head>
 <body>
 <div th:replace="~{fragments/sidebar :: sidebar(active='dashboard')}"></div>
@@ -12,15 +13,17 @@
         </div>
         <div class="user-info">
             <div class="user-name">
-                <strong th:text="${session.usuarioLogueado != null ? session.usuarioLogueado.username : 'Invitado'}">Usuario</strong>
-                <small th:text="${session.usuarioLogueado != null ? session.usuarioLogueado.rol : ''}">Rol</small>
+                <strong sec:authentication="name">Usuario</strong>
+                <small sec:authentication="principal.authorities">Rol</small>
             </div>
             <div class="user-avatar">
                 <i class="fas fa-user-circle"></i>
             </div>
-            <a href="/logout" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-            </a>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" style="border: none; cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
         </div>
     </div>
 
