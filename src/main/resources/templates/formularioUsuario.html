@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='usuarios')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-user-shield"></i> <span th:text="${viewTitle}">Nuevo Usuario</span></h1>
+            <p>Complete los datos para el acceso al sistema</p>
+        </div>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
+            <input type="hidden" th:field="*{codigoUsuario}" th:value="*{codigoUsuario}">
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                    <i class="fas fa-user"></i> Nombre de Usuario
+                </label>
+                <input type="text" th:field="*{username}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);"
+                       placeholder="Ej: jcajchun" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                    <i class="fas fa-envelope"></i> Correo Electrónico
+                </label>
+                <input type="email" th:field="*{email}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);"
+                       placeholder="usuario@kinal.edu.gt" required>
+            </div>
+
+            <div style="margin-bottom: 15px;" th:if="${usuario.codigoUsuario == null or usuario.codigoUsuario == 0}">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                    <i class="fas fa-lock"></i> Contraseña
+                </label>
+                <input type="password" th:field="*{password}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);"
+                       placeholder="Mínimo 6 caracteres" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                    <i class="fas fa-user-tag"></i> Rol del Usuario
+                </label>
+                <select th:field="*{rol}" class="form-control"
+                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+                    <option value="ADMIN">Administrador</option>
+                    <option value="USER">Cajero / Operador</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">
+                    <i class="fas fa-check-circle"></i> Estado
+                </label>
+                <select th:field="*{estado}" class="form-control"
+                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+                    <option th:value="1">Activo</option>
+                    <option th:value="0">Inactivo</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <a th:href="@{/usuarios}" class="btn-primary" style="background: var(--gris-asfalto); text-decoration: none;">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Guardar Usuario
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

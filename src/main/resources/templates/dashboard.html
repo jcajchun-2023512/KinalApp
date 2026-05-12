@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='dashboard')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-chart-line" style="color: #F18F01;"></i> Dashboard</h1>
+            <p class="page-subtitle">Bienvenido al panel de control de Kinal App</p>
+        </div>
+        <div class="user-info">
+            <div class="user-name">
+                <strong sec:authentication="name">Usuario</strong>
+                <small sec:authentication="principal.authorities">Rol</small>
+            </div>
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn" style="border: none; cursor: pointer;">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stats Cards MEJORADAS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${totalClientes}">0</h3>
+                <p>Total Clientes</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${clientesActivos}">0</h3>
+                <p>Clientes Activos</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${totalProductos}">0</h3>
+                <p>Productos Registrados</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-box"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3 th:text="${totalVentas}">0</h3>
+                <p>Ventas Realizadas</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Últimos Clientes MEJORADA -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-clock" style="color: #F18F01;"></i> Últimos Clientes Registrados</h2>
+            <a href="/clientes" class="btn-primary">
+                <i class="fas fa-eye"></i> Ver todos
+            </a>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th><i class="fas fa-id-card"></i> DPI</th>
+                    <th><i class="fas fa-user"></i> Nombre Completo</th>
+                    <th><i class="fas fa-map-marker-alt"></i> Dirección</th>
+                    <th><i class="fas fa-circle"></i> Estado</th>
+                    <th><i class="fas fa-cogs"></i> Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cliente : ${ultimosClientes}">
+                    <td><strong th:text="${cliente.DPICliente}">1234567890101</strong></td>
+                    <td th:text="${cliente.nombreCliente} + ' ' + ${cliente.apellidoCliente}">Javier Cajchún</td>
+                    <td th:text="${cliente.direccion}">Sakerty 2, Guatemala</td>
+                    <td>
+                        <span class="badge" th:classappend="${cliente.estado == 1} ? 'badge-success' : 'badge-danger'"
+                              th:text="${cliente.estado == 1} ? 'Activo' : 'Inactivo'"></span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}" class="btn-sm btn-warning" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a th:href="@{/clientes/eliminar/{dpi}(dpi=${cliente.DPICliente})}" class="btn-sm btn-danger"
+                               onclick="return confirm('¿Eliminar este cliente?')" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${ultimosClientes.empty}">
+                    <td colspan="5" class="empty-row">
+                        <i class="fas fa-inbox"></i> No hay clientes registrados
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

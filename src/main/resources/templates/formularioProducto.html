@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}"></head>
+<body>
+<div th:replace="~{fragments/sidebar :: sidebar(active='productos')}"></div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="page-title">
+            <h1><i class="fas fa-box"></i> <span th:text="${viewTitle}">Producto</span></h1>
+        </div>
+    </div>
+
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+            <input type="hidden" th:field="*{codigoProducto}">
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Nombre del Producto</label>
+                <input type="text" th:field="*{nombreProducto}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Precio</label>
+                <input type="number" step="0.01" th:field="*{precio}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Stock</label>
+                <input type="number" th:field="*{stock}" class="form-control"
+                       style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);" required>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Estado</label>
+                <select th:field="*{estado}" class="form-control"
+                        style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--azul-glacial);">
+                    <option th:value="1">Activo</option>
+                    <option th:value="0">Inactivo</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <a th:href="@{/productos}" class="btn-primary" style="background: var(--gris-asfalto); text-decoration: none;">Cancelar</a>
+                <button type="submit" class="btn-primary">Guardar Producto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
