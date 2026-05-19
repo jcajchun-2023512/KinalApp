@@ -21,7 +21,7 @@ public class DetalleVenta {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Ventas_codigo_venta", referencedColumnName = "codigo_venta", nullable = false)
-    private Venta ventas;
+    private Venta venta;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Producto_codigo_producto", referencedColumnName = "codigo_producto",  nullable = false)
@@ -30,12 +30,12 @@ public class DetalleVenta {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(Long codigoDetalleVenta, int cantidad, BigDecimal precioUnitario, BigDecimal subTotal, Venta ventas, Producto producto) {
+    public DetalleVenta(Long codigoDetalleVenta, int cantidad, BigDecimal precioUnitario, BigDecimal subTotal, Venta venta, Producto producto) {
         this.codigoDetalleVenta = codigoDetalleVenta;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subTotal = subTotal;
-        this.ventas = ventas;
+        this.venta = venta;
         this.producto = producto;
     }
 
@@ -72,11 +72,11 @@ public class DetalleVenta {
     }
 
     public Venta getVentas() {
-        return ventas;
+        return venta;
     }
 
     public void setVentas(Venta ventas) {
-        this.ventas = ventas;
+        this.venta = ventas;
     }
 
     public Producto getProducto() {

@@ -23,7 +23,7 @@ public class Cliente {
     private int estado;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Venta> ventas;
 
     public Cliente() {
