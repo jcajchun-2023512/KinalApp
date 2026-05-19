@@ -25,7 +25,7 @@ public class Usuario {
     private int estado;
 
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Venta> ventas;
 

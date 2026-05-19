@@ -64,14 +64,7 @@
                 <td th:text="${detalle.cantidad}">0</td>
                 <td th:text="'Q' + ${detalle.precioUnitario}">Q0.00</td>
                 <td th:text="'Q' + ${detalle.subTotal}" style="font-weight: bold;">Q0.00</td>
-                <td>
-                    <a th:href="@{/detalleVentas/eliminar/{id}(id=${detalle.codigoDetalleVenta})}"
-                       class="btn-sm btn-danger"
-                       onclick="return confirm('¿Eliminar este producto de la venta?')"
-                       title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </td>
+
             </tr>
             <tr th:if="${detalles == null or detalles.empty}">
                 <td colspan="6" class="empty-row">
